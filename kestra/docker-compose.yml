@@ -1,0 +1,13 @@
+version: "3"
+services:
+  kestra:
+    image: kestra/kestra:latest
+    user: "root"         # Run as Admin
+    privileged: true     # Force access to hardware/sockets
+    ports:
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/kestra-wd:/tmp/kestra-wd
+      - ../:/home/kestra/project
+    command: server local
