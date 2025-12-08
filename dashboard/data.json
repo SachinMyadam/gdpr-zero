@@ -1,0 +1,1 @@
+{"status": "CRITICAL", "events": [{"timestamp": "2025-12-08T07:32:06.857341", "type": "LEAK_DETECTED", "message": "CRITICAL: Plaintext password found in logs (api/login.js)"}]}
