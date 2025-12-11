@@ -1,0 +1,10 @@
+{
+  "active_leaks": 0,
+  "auto_fixed": 12,
+  "logs": [
+    "8:29:39 AM: Oumi fine-tuned model on remote T4 GPU.",
+    "8:29:37 AM: CRITICAL: Plaintext password found.",
+    "5:44:25 AM: CRITICAL: Plaintext password found in logs/app.log",
+    "5:42:40 AM: CRITICAL: Plaintext password found in logs/app.log"
+  ]
+}
