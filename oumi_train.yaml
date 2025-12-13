@@ -1,0 +1,30 @@
+model:
+  name: "meta-llama/Meta-Llama-3-8B"
+  trust_remote_code: true
+  dtype: "bfloat16"
+
+data:
+  train:
+    datasets:
+      - type: "json"
+        path: "logs/training_data.json"
+    max_seq_len: 2048
+
+training:
+  output_dir: "output/gdpr-zero-v1"
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4
+  learning_rate: 2e-4
+  num_train_epochs: 3
+  
+  # LoRA Configuration (Parameter Efficient Fine-Tuning)
+  adapter_config:
+    type: "lora"
+    r: 8
+    lora_alpha: 32
+    lora_dropout: 0.05
+    target_modules: ["q_proj", "v_proj"]
+
+evaluation:
+  evaluation_strategy: "steps"
+  eval_steps: 50
