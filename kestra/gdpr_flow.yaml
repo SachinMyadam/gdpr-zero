@@ -1,0 +1,38 @@
+id: gdpr-leak-monitor
+namespace: com.gdpr.zero
+description: "Continuous monitoring loop for PII leaks using Kestra AI agents."
+
+tasks:
+  - id: monitor_logs
+    type: io.kestra.plugin.scripts.python.Script
+    docker:
+      image: python:3.10
+    script: |
+      import json
+      print("🔍 Kestra Agent: Scanning application logs for patterns...")
+      # Simulating log ingestion from the app container
+      log_data = {"status": "CRITICAL", "content": "password=Secret123"}
+      with open('{{output.dir}}/logs.json', 'w') as f:
+          json.dump(log_data, f)
+
+  - id: analyze_with_ai
+    type: io.kestra.plugin.openai.ChatCompletion
+    description: "AI Agent summarization of the leak severity"
+    apiKey: "{{ secret('OPENAI_API_KEY') }}"
+    model: gpt-4
+    messages:
+      - role: system
+        content: "You are a GDPR Compliance Officer. Summarize this log event."
+      - role: user
+        content: "{{ outputs.monitor_logs.vars }}"
+
+  - id: trigger_remediation
+    type: io.kestra.core.tasks.flows.Trigger
+    description: "Trigger the Cline Auto-Fix Agent if PII is confirmed"
+    flowId: auto-redact-patch
+    condition: "{{ outputs.analyze_with_ai.choices[0].message.content contains 'CRITICAL' }}"
+    
+triggers:
+  - id: schedule
+    type: io.kestra.core.models.triggers.types.Schedule
+    cron: "*/5 * * * *"
